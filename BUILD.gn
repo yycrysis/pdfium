@@ -277,6 +277,11 @@ component("pdfium_core") {
   }
 }
 
+group("pdfium") {
+  deps = [":pdfium_core" ]
+  public_deps = [":pdfium_core" ]
+}
+
 # Targets below this are only visible within this file.
 visibility = [ ":*" ]
 
