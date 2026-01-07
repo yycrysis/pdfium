@@ -330,6 +330,14 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColor(FPDF_ANNOTATION annot,
                                                        unsigned int* B,
                                                        unsigned int* A);
 
+// 跟FPDFAnnot_GetColor相比 不管有没有AP，都获取颜色  
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColorSimple(FPDF_ANNOTATION annot,
+                                                       FPDFANNOT_COLORTYPE type,
+                                                       unsigned int* R,
+                                                       unsigned int* G,
+                                                       unsigned int* B,
+                                                       unsigned int* A);
+
 // Experimental API.
 // Check if the annotation is of a type that has attachment points
 // (i.e. quadpoints). Quadpoints are the vertices of the rectangle that
