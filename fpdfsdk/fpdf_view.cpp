@@ -914,6 +914,32 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_DeviceToPage(FPDF_PAGE page,
   return true;
 }
 
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_PageToDeviceWithFloat(FPDF_PAGE page,
+                                                      int start_x,
+                                                      int start_y,
+                                                      int size_x,
+                                                      int size_y,
+                                                      int rotate,
+                                                      double page_x,
+                                                      double page_y,
+                                                      float* device_x,
+                                                      float* device_y) {
+  if (!page || !device_x || !device_y)
+    return false;
+
+  IPDF_Page* pPage = IPDFPageFromFPDFPage(page);
+  const FX_RECT rect(start_x, start_y, start_x + size_x, start_y + size_y);
+  CFX_PointF page_point(static_cast<float>(page_x), static_cast<float>(page_y));
+  absl::optional<CFX_PointF> pos =
+      pPage->PageToDevice(rect, rotate, page_point);
+  if (!pos.has_value())
+    return false;
+
+  *device_x = pos->x;
+  *device_y = pos->y;
+  return true;
+}
+
 FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_PageToDevice(FPDF_PAGE page,
                                                       int start_x,
                                                       int start_y,
