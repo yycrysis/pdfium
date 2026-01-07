@@ -930,7 +930,7 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_PageToDeviceWithFloat(FPDF_PAGE page,
   IPDF_Page* pPage = IPDFPageFromFPDFPage(page);
   const FX_RECT rect(start_x, start_y, start_x + size_x, start_y + size_y);
   CFX_PointF page_point(static_cast<float>(page_x), static_cast<float>(page_y));
-  absl::optional<CFX_PointF> pos =
+  std::optional<CFX_PointF> pos =
       pPage->PageToDevice(rect, rotate, page_point);
   if (!pos.has_value())
     return false;
