@@ -1052,6 +1052,18 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_PageToDevice(FPDF_PAGE page,
                                                       int* device_x,
                                                       int* device_y);
 
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_PageToDeviceWithFloat(FPDF_PAGE page,
+                                                      int start_x,
+                                                      int start_y,
+                                                      int size_x,
+                                                      int size_y,
+                                                      int rotate,
+                                                      double page_x,
+                                                      double page_y,
+                                                      float* device_x,
+                                                      float* device_y);
+
+
 // Function: FPDFBitmap_Create
 //          Create a device independent bitmap (FXDIB).
 // Parameters:
