@@ -234,7 +234,7 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot,
 
 // 设置笔迹线宽
 FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_SetInkStrokeWidth(FPDF_ANNOTATION annot, int width);
-FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_SetInkStrokeWidthEx(FPDF_ANNOTATION annot, float width);
+FPDF_EXPORT float FPDF_CALLCONV FPDFAnnot_SetInkStrokeWidthEx(FPDF_ANNOTATION annot, float width);
 
 // 获取笔迹线宽
 FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_GetInkStrokeWidth(FPDF_ANNOTATION annot);
