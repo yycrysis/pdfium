@@ -878,6 +878,65 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColor(FPDF_ANNOTATION annot,
   return true;
 }
 
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColorSimple(FPDF_ANNOTATION annot,
+                                                       FPDFANNOT_COLORTYPE type,
+                                                       unsigned int* R,
+                                                       unsigned int* G,
+                                                       unsigned int* B,
+                                                       unsigned int* A) {
+  RetainPtr<CPDF_Dictionary> pAnnotDict =
+      GetMutableAnnotDictFromFPDFAnnotation(annot);
+
+  if (!pAnnotDict || !R || !G || !B || !A)
+    return false;
+
+  // 跟FPDFAnnot_GetColor相比 不管有没有AP，都获取颜色
+
+  RetainPtr<const CPDF_Array> pColor = pAnnotDict->GetArrayFor(
+      type == FPDFANNOT_COLORTYPE_InteriorColor ? "IC" : "C");
+  *A = (pAnnotDict->KeyExist("CA") ? pAnnotDict->GetFloatFor("CA") : 1) * 255.f;
+  if (!pColor) {
+    // Use default color. The default colors must be consistent with the ones
+    // used to generate AP. See calls to GetColorStringWithDefault() in
+    // CPDF_GenerateAP::Generate*AP().
+    if (pAnnotDict->GetNameFor(pdfium::annotation::kSubtype) == "Highlight") {
+      *R = 255;
+      *G = 255;
+      *B = 0;
+    } else {
+      *R = 0;
+      *G = 0;
+      *B = 0;
+    }
+    return true;
+  }
+
+  CFX_Color color = fpdfdoc::CFXColorFromArray(*pColor);
+  switch (color.nColorType) {
+    case CFX_Color::Type::kRGB:
+      *R = color.fColor1 * 255.f;
+      *G = color.fColor2 * 255.f;
+      *B = color.fColor3 * 255.f;
+      break;
+    case CFX_Color::Type::kGray:
+      *R = 255.f * color.fColor1;
+      *G = 255.f * color.fColor1;
+      *B = 255.f * color.fColor1;
+      break;
+    case CFX_Color::Type::kCMYK:
+      *R = 255.f * (1 - color.fColor1) * (1 - color.fColor4);
+      *G = 255.f * (1 - color.fColor2) * (1 - color.fColor4);
+      *B = 255.f * (1 - color.fColor3) * (1 - color.fColor4);
+      break;
+    case CFX_Color::Type::kTransparent:
+      *R = 0;
+      *G = 0;
+      *B = 0;
+      break;
+  }
+  return true;
+}
+
 FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
 FPDFAnnot_HasAttachmentPoints(FPDF_ANNOTATION annot) {
   if (!annot) {
