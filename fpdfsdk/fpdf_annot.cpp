@@ -608,7 +608,7 @@ FPDFAnnot_SetInkStrokeWidth(FPDF_ANNOTATION annot, int width)
 }
 
 FPDF_EXPORT float FPDF_CALLCONV
-FPDFAnnot_SetInkStrokeWidth(FPDF_ANNOTATION annot, float width)
+FPDFAnnot_SetInkStrokeWidthEx(FPDF_ANNOTATION annot, float width)
 {
     if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK || width < 0) {
         return -1;
